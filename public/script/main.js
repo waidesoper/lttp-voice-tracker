@@ -2,6 +2,7 @@
 var trackerOptions = {
   showchests: true,
   showbigkeys: false,
+  showsmallkeys: false,
   showprizes: true,
   showmedals: true,
   showlabels: true,
@@ -19,6 +20,7 @@ var trackerData = {
   items: itemsInit,
   dungeonchests: dungeonchestsInit,
   bigkeys: bigkeyInit,
+  smallkeys: smallkeyInit,
   dungeonbeaten: dungeonbeatenInit,
   prizes: prizesInit,
   medallions: medallionsInit,
@@ -83,6 +85,8 @@ function setConfigObject(configobj) {
     document.getElementsByName('showchest')[0].onchange();
     document.getElementsByName('showbigkeys')[0].checked = !!configobj.bigkeys;
     document.getElementsByName('showbigkeys')[0].onchange();
+    document.getElementsByName('showsmallkeys')[0].checked = !!configobj.smallkeys;
+    document.getElementsByName('showsmallkeys')[0].onchange();
     document.getElementsByName('showcrystal')[0].checked = !!configobj.prize;
     document.getElementsByName('showcrystal')[0].onchange();
     document.getElementsByName('showmedallion')[0].checked = !!configobj.medal;
@@ -144,6 +148,7 @@ function getConfigObject() {
 
     configobj.chest = document.getElementsByName('showchest')[0].checked ? 1 : 0;
     configobj.bigkeys = document.getElementsByName('showbigkeys')[0].checked ? 1 : 0;
+    configobj.smallkeys = document.getElementsByName('showsmallkeys')[0].checked ? 1 : 0;
     configobj.prize = document.getElementsByName('showcrystal')[0].checked ? 1 : 0;
     configobj.medal = document.getElementsByName('showmedallion')[0].checked ? 1 : 0;
     configobj.label = document.getElementsByName('showlabel')[0].checked ? 1 : 0;
@@ -188,6 +193,12 @@ function showChest(sender) {
 
 function showbigkeys(sender) {
     trackerOptions.showbigkeys = sender.checked;
+    refreshMap();
+    saveCookie();
+}
+
+function showsmallkeys(sender) {
+    trackerOptions.showsmallkeys = sender.checked;
     refreshMap();
     saveCookie();
 }
@@ -287,6 +298,7 @@ function showSettings(sender) {
     if (trackerOptions.editmode) {
         trackerOptions.showchests = document.getElementsByName('showchest')[0].checked;
         trackerOptions.showbigkeys = document.getElementsByName('showbigkeys')[0].checked;
+        trackerOptions.showsmallkeys = document.getElementsByName('showsmallkeys')[0].checked;
         trackerOptions.showprizes = document.getElementsByName('showcrystal')[0].checked;
         trackerOptions.showmedals = document.getElementsByName('showmedallion')[0].checked;
         trackerOptions.showlabels = document.getElementsByName('showlabel')[0].checked;
@@ -320,6 +332,7 @@ function showTracker(target, sender) {
 function EditMode() {
     trackerOptions.showchests = false;
     trackerOptions.showbigkeys = false;
+    trackerOptions.showsmallkeys = false;
     trackerOptions.showprizes = false;
     trackerOptions.showmedals = false;
     trackerOptions.showlabels = false;
@@ -535,6 +548,7 @@ function createRoom() {
         items: itemsInit,
         dungeonchests: dungeonchestsInit,
         bigkeys: bigkeyInit,
+        smallkeys: smallkeyInit,
         dungeonbeaten: dungeonbeatenInit,
         prizes: prizesInit,
         medallions: medallionsInit,
@@ -546,6 +560,7 @@ function resetFirebase() {
     rootRef.child('items').set(itemsInit);
     rootRef.child('dungeonchests').set(dungeonchestsInit);
     rootRef.child('bigkeys').set(bigkeyInit);
+    rootRef.child('smallkeys').set(smallkeyInit);
     rootRef.child('dungeonbeaten').set(dungeonbeatenInit);
     rootRef.child('prizes').set(prizesInit);
     rootRef.child('medallions').set(medallionsInit);
@@ -583,6 +598,10 @@ function initTracker() {
         trackerData.bigkeys = snapshot.val();
         updateAll();
     });
+    rootRef.child('smallkeys').on('value', function(snapshot) {
+        trackerData.smallkeys = snapshot.val();
+        updateAll();
+    });
     rootRef.child('dungeonbeaten').on('value', function(snapshot) {
         trackerData.dungeonbeaten = snapshot.val();
         updateAll();
@@ -605,7 +624,7 @@ function initTracker() {
 }
 
 function updateAll() {
-    if(trackerData.items && trackerData.dungeonchests && trackerData.bigkeys && trackerData.dungeonbeaten && trackerData.prizes && trackerData.medallions && trackerData.chestsopened) {
+    if(trackerData.items && trackerData.dungeonchests && trackerData.bigkeys && trackerData.smallkeys && trackerData.dungeonbeaten && trackerData.prizes && trackerData.medallions && trackerData.chestsopened) {
       vm.displayVueMap = true;
       refreshMap();
     }
@@ -702,8 +721,18 @@ Vue.component('tracker-cell', {
     },
     bigKeyImage: function() {
       if(this.bossNum && this.trackerOptions && this.trackerOptions.showbigkeys) {
-        if (this.trackerData.bigkeys[this.bossNum]) {
+        if(this.trackerData.bigkeys[this.bossNum]) {
           return "url(/images/bigkey.png)";
+        } else {
+          return "url(/images/nothing.png)";
+        }
+      }
+      return null;
+    },
+    smallKeyImage: function() {
+      if(this.bossNum && this.trackerOptions && this.trackerOptions.showsmallkeys) {
+        if(this.trackerData.smallkeys[this.bossNum] > 0) {
+          return "url(/images/smallkey" + this.trackerData.smallkeys[this.bossNum] + ".png)";
         } else {
           return "url(/images/nothing.png)";
         }
@@ -777,6 +806,18 @@ Vue.component('tracker-cell', {
     },
     clickBigKey: function(e) {
       rootRef.child('bigkeys').child(this.bossNum).set(!this.trackerData.bigkeys[this.bossNum]);
+    },
+    clickSmallKey: function(amt) {
+      var keyitem = 'key' + this.bossNum;
+      var modamt = itemsMax[keyitem] + 1;
+      var newVal = (this.trackerData.smallkeys[this.bossNum] + amt + modamt) % modamt;
+      rootRef.child('smallkeys').child(this.bossNum).set(newVal);
+    },
+    clickSmallKeyForward: function(e) {
+      this.clickSmallKey(1);
+    },
+    clickSmallKeyBack: function(e) {
+      this.clickSmallKey(-1);
     },
     clickPrize: function(amt) {
       rootRef.child('prizes').child(this.bossNum).set((this.trackerData.prizes[this.bossNum] + amt + 5) % 5 );
