@@ -118,6 +118,8 @@ var dungeonchestsInit = {
     10: 20
 };
 
+var bigkeyInit = [false, false, false, false, false, false, false, false, false, false, false];
+var smallkeyInit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 var dungeonbeatenInit = [false, false, false, false, false, false, false, false, false, false, false];
 var prizesInit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -191,5 +193,17 @@ var itemsMax = {
     chest7: 3,
     chest8: 2,
     chest9: 5,
-    chest10: 20
+    chest10: 20,
+
+    key0: 0,
+    key1: 1,
+    key2: 1,
+    key3: 6,
+    key4: 1,
+    key5: 3,
+    key6: 1,
+    key7: 2,
+    key8: 3,
+    key9: 4,
+    key10: 4
 };
