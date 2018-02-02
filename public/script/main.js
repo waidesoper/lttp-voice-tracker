@@ -624,7 +624,7 @@ function initTracker() {
 }
 
 function updateAll() {
-    if(trackerData.items && trackerData.dungeonchests && trackerData.bigkeys && trackerData.smallkeys && trackerData.dungeonbeaten && trackerData.prizes && trackerData.medallions && trackerData.chestsopened) {
+    if(trackerData.items && trackerData.dungeonchests && trackerData.dungeonbeaten && trackerData.prizes && trackerData.medallions && trackerData.chestsopened) {
       vm.displayVueMap = true;
       refreshMap();
     }
@@ -720,7 +720,7 @@ Vue.component('tracker-cell', {
       return null;
     },
     bigKeyImage: function() {
-      if(this.bossNum && this.trackerOptions && this.trackerOptions.showbigkeys) {
+      if(this.bossNum && this.trackerOptions && this.trackerOptions.showbigkeys && this.trackerData.bigkeys) {
         if(this.trackerData.bigkeys[this.bossNum]) {
           return "url(/images/bigkey.png)";
         } else {
@@ -730,7 +730,7 @@ Vue.component('tracker-cell', {
       return null;
     },
     smallKeyImage: function() {
-      if(this.bossNum && this.trackerOptions && this.trackerOptions.showsmallkeys) {
+      if(this.bossNum && this.trackerOptions && this.trackerOptions.showsmallkeys && this.trackerData.smallkeys) {
         if(this.trackerData.smallkeys[this.bossNum] > 0) {
           return "url(/images/smallkey" + this.trackerData.smallkeys[this.bossNum] + ".png)";
         } else {
