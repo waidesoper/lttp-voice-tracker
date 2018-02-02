@@ -13,6 +13,12 @@
         "source": "/**",
         "destination": "/tracker.html"
       }
+    ],
+    "ignore": [
+      "firebase.json",
+      ".idea/*",
+      "**/.*",
+      "**/node_modules/**"
     ]
   }
 }

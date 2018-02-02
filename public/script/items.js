@@ -118,6 +118,7 @@ var dungeonchestsInit = {
     10: 20
 };
 
+var bigkeyInit = [false, false, false, false, false, false, false, false, false, false, false];
 
 var dungeonbeatenInit = [false, false, false, false, false, false, false, false, false, false, false];
 var prizesInit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

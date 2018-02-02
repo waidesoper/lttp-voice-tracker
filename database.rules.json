@@ -29,6 +29,10 @@
           ".read": "true",
           ".write": "data.parent().child('editors').child(auth.uid).exists()"
         },
+        "bigkeys": {
+          ".read": "true",
+          ".write": "data.parent().child('editors').child(auth.uid).exists()"
+        },
         "dungeonbeaten": {
           ".read": "true",
           ".write": "data.parent().child('editors').child(auth.uid).exists()"

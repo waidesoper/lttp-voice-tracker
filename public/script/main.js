@@ -1,6 +1,7 @@
 
 var trackerOptions = {
   showchests: true,
+  showbigkeys: false,
   showprizes: true,
   showmedals: true,
   showlabels: true,
@@ -17,6 +18,7 @@ for(var i = 0; i < chests.length; i++) {
 var trackerData = {
   items: itemsInit,
   dungeonchests: dungeonchestsInit,
+  bigkeys: bigkeyInit,
   dungeonbeaten: dungeonbeatenInit,
   prizes: prizesInit,
   medallions: medallionsInit,
@@ -79,6 +81,8 @@ function setConfigObject(configobj) {
 
     document.getElementsByName('showchest')[0].checked = !!configobj.chest;
     document.getElementsByName('showchest')[0].onchange();
+    document.getElementsByName('showbigkeys')[0].checked = !!configobj.bigkeys;
+    document.getElementsByName('showbigkeys')[0].onchange();
     document.getElementsByName('showcrystal')[0].checked = !!configobj.prize;
     document.getElementsByName('showcrystal')[0].onchange();
     document.getElementsByName('showmedallion')[0].checked = !!configobj.medal;
@@ -139,6 +143,7 @@ function getConfigObject() {
     configobj.mapLogic = document.querySelector('input[name="maplogic"]:checked').value;
 
     configobj.chest = document.getElementsByName('showchest')[0].checked ? 1 : 0;
+    configobj.bigkeys = document.getElementsByName('showbigkeys')[0].checked ? 1 : 0;
     configobj.prize = document.getElementsByName('showcrystal')[0].checked ? 1 : 0;
     configobj.medal = document.getElementsByName('showmedallion')[0].checked ? 1 : 0;
     configobj.label = document.getElementsByName('showlabel')[0].checked ? 1 : 0;
@@ -181,6 +186,12 @@ function showChest(sender) {
     saveCookie();
 }
 
+function showbigkeys(sender) {
+    trackerOptions.showbigkeys = sender.checked;
+    refreshMap();
+    saveCookie();
+}
+
 function showCrystal(sender) {
     trackerOptions.showprizes = sender.checked;
     refreshMap();
@@ -202,7 +213,7 @@ function showLabel(sender) {
 function setOrder(H) {
     if (H) {
         document.getElementById('layoutdiv').classList.remove('flexcontainer');
-    } 
+    }
     else {
         document.getElementById('layoutdiv').classList.add('flexcontainer');
     }
@@ -275,6 +286,7 @@ function setLogic(logic) {
 function showSettings(sender) {
     if (trackerOptions.editmode) {
         trackerOptions.showchests = document.getElementsByName('showchest')[0].checked;
+        trackerOptions.showbigkeys = document.getElementsByName('showbigkeys')[0].checked;
         trackerOptions.showprizes = document.getElementsByName('showcrystal')[0].checked;
         trackerOptions.showmedals = document.getElementsByName('showmedallion')[0].checked;
         trackerOptions.showlabels = document.getElementsByName('showlabel')[0].checked;
@@ -290,9 +302,9 @@ function showSettings(sender) {
             x.style.display = 'initial';
             sender.innerHTML = 'X';
         } else {
-            x.style.display = 'none';		
+            x.style.display = 'none';
             sender.innerHTML = '🔧';
-        } 
+        }
     }
 }
 
@@ -307,6 +319,7 @@ function showTracker(target, sender) {
 
 function EditMode() {
     trackerOptions.showchests = false;
+    trackerOptions.showbigkeys = false;
     trackerOptions.showprizes = false;
     trackerOptions.showmedals = false;
     trackerOptions.showlabels = false;
@@ -376,7 +389,7 @@ function itemConfigClick (sender) {
     if (trackerOptions.selected.item) {
         document.getElementById(trackerOptions.selected.item).style.border = '0px';
         sender.style.border = '3px solid yellow';
-        trackerOptions.selected = {item:item};	
+        trackerOptions.selected = {item:item};
     } else if (trackerOptions.selected.row !== undefined) {
         itemGrid[selected.row][selected.col]['item'].style.border = '1px solid white';
         var old = itemLayout[selected.row][selected.col];
@@ -495,7 +508,7 @@ function populateItemconfig() {
             rowitem.innerText = dungeons[key.substring(4)].label;
         }
         row.appendChild(rowitem);
-    }		
+    }
 }
 
 function enterPasscode() {
@@ -521,6 +534,7 @@ function createRoom() {
         passcode: passcode,
         items: itemsInit,
         dungeonchests: dungeonchestsInit,
+        bigkeys: bigkeyInit,
         dungeonbeaten: dungeonbeatenInit,
         prizes: prizesInit,
         medallions: medallionsInit,
@@ -531,6 +545,7 @@ function createRoom() {
 function resetFirebase() {
     rootRef.child('items').set(itemsInit);
     rootRef.child('dungeonchests').set(dungeonchestsInit);
+    rootRef.child('bigkeys').set(bigkeyInit);
     rootRef.child('dungeonbeaten').set(dungeonbeatenInit);
     rootRef.child('prizes').set(prizesInit);
     rootRef.child('medallions').set(medallionsInit);
@@ -564,6 +579,10 @@ function initTracker() {
         trackerData.dungeonchests = snapshot.val();
         updateAll();
     });
+    rootRef.child('bigkeys').on('value', function(snapshot) {
+        trackerData.bigkeys = snapshot.val();
+        updateAll();
+    });
     rootRef.child('dungeonbeaten').on('value', function(snapshot) {
         trackerData.dungeonbeaten = snapshot.val();
         updateAll();
@@ -586,7 +605,7 @@ function initTracker() {
 }
 
 function updateAll() {
-    if(trackerData.items && trackerData.dungeonchests && trackerData.dungeonbeaten && trackerData.prizes && trackerData.medallions && trackerData.chestsopened) {
+    if(trackerData.items && trackerData.dungeonchests && trackerData.bigkeys && trackerData.dungeonbeaten && trackerData.prizes && trackerData.medallions && trackerData.chestsopened) {
       vm.displayVueMap = true;
       refreshMap();
     }
@@ -681,6 +700,16 @@ Vue.component('tracker-cell', {
       }
       return null;
     },
+    bigKeyImage: function() {
+      if(this.bossNum && this.trackerOptions && this.trackerOptions.showbigkeys) {
+        if (this.trackerData.bigkeys[this.bossNum]) {
+          return "url(/images/bigkey.png)";
+        } else {
+          return "url(/images/nothing.png)";
+        }
+      }
+      return null;
+    },
     prizeImage: function() {
       if(this.bossNum && this.bossNum !== "10" && this.trackerOptions && this.trackerOptions.showprizes) {
         return "url(/images/dungeon" + this.trackerData.prizes[this.bossNum] + ".png)";
@@ -746,15 +775,18 @@ Vue.component('tracker-cell', {
     clickChestBack: function(e) {
       this.clickChest(-1);
     },
+    clickBigKey: function(e) {
+      rootRef.child('bigkeys').child(this.bossNum).set(!this.trackerData.bigkeys[this.bossNum]);
+    },
     clickPrize: function(amt) {
-      rootRef.child('prizes').child(this.bossNum).set( (this.trackerData.prizes[this.bossNum] + amt + 5) % 5 );
+      rootRef.child('prizes').child(this.bossNum).set((this.trackerData.prizes[this.bossNum] + amt + 5) % 5 );
     },
     clickPrizeForward: function(e) {
         this.clickPrize(1);
     },
     clickPrizeBack: function(e) {
         this.clickPrize(-1);
-    },
+    }
   }
 });
 
