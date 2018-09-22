@@ -528,11 +528,11 @@ function enterPasscode() {
     var passcode = document.getElementById('entryPasscodeInput').value;
     rootRef.child('editors').child(uid).set(passcode, function(error) {
         if(error) {
-            console.log("Did not add to editors");
-            console.log(error);
+          document.getElementById('entryPasscodeInput').value = "Incorrect password";
         }
         else {
-            console.log("Added to editors successfully");
+          document.getElementById('entryPasscodeInput').value = "Editing enabled";
+          document.getElementById('entryPasscodeInput').disabled = true;
         }
     });
 }
