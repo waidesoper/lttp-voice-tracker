@@ -120,7 +120,7 @@
         </footer>
 
         <script type="text/x-template" id="tracker-table">
-            <div class="vueTrackerTable" :style="{ backgroundColor: 'black'}">
+            <div class="vueTrackerTable" :style="/* { backgroundColor: 'black'} */">
                 <div v-for="(itemRow, itemRowIndex) in itemRows" :key="itemRowIndex">
                     <div :style="{ width: (maxRowLength - itemRow.length) * 32 + 'px', display:'inline-block' }" class="rowSpacer"></div>
                     <tracker-cell v-for="(item, itemColumnIndex) in itemRow" :itemName="item" :itemValue="itemFor(item)"
