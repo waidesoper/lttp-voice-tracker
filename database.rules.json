@@ -21,6 +21,14 @@
             ".write": "auth.uid === $editor_uid && newData.val() === data.parent().parent().child('passcode').val()"
           }
         },
+        "grammars": {
+          ".read": "true",
+          ".write": "data.parent().child('editors').child(auth.uid).exists()"
+        },
+        "voiceenabled": {
+          ".read": "true",
+          ".write": "data.parent().child('editors').child(auth.uid).exists()"
+        },
         "items": {
           ".read": "true",
           ".write": "data.parent().child('editors').child(auth.uid).exists()"

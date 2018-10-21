@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <h1>LttP Networked Item Tracker</h1>
+    <h1>LttP Networked Item Tracker Featuring Voice Activation</h1>
     <p style="font-size: 1.4em;">Go to <span id="loc"></span>/[NAME] to view a tracker. If the name does not
         already exist, you will be able to create the tracker. If it does exist, you will be able to watch the
         tracker and, if the room creator gives you the passcode, update the tracker as well.</p>
@@ -17,12 +17,33 @@
         the tracker without putting in the passcode.</p>
     <p>If you prefer a simpler version of the tracker, you can access one at <span id="loc2"></span>/simple/[NAME]
         that does not have map or chest tracking but does have a timer.</p>
+    <p>Using Voice activation: in the settings menu is a voice settings section where you can toggle voice activation (if you are using Google Chrome)
+        Allowing this will turn on the always listening tracker.
+    </p>
+    <p>There are 3 main modes to the voice tracker: items, dungeon items, and dungeon prizes</p>
+    <p>items mode: say "Got X" where X is the item name, the tracker will speak it back to you and update the tracker</p>
+    <p>dungeon items: to enter dungeon items mode say "Start X" where X is the dungeon name, items mode will now mark off chests as well
+        To finish dungeon items you can say "finished" which will return to items mode, but won't mark the boss 
+        as complete, or "killed boss" which WILL mark the boss as defeated
+    </p>
+    <p>dungeon prizes: say a dungeon prize followed by the dungeon to mark in the tracker, e.g. "Crystal Eastern".
+        You can also mark meddallion requirements using the same method
+    </p>
+    <p>Adding new grammars: when recording an item or entering a dungeon, sometimes the voice recognition will pick up a different word
+        The detected statement will show up in the "Last Heard" textbox in settings. You can select a mapping from the options list and click
+        the "save grammar" button to add that mapping to your personal grammars list.
+    </p>
     <hr>
     <h2>Changelog</h2>
     <ul>
+        <li><strong>2018-10-21:</strong>
+            <ul>
+                <li>Added support for toggling voice recognition and modifying the grammars</li>
+            </ul>
+        </li>
         <li><strong>2018-10-17:</strong>
             <ul>
-                <li></li>
+                <li>Initial release of voice tracker support</li>
             </ul>
         </li>
         <li><strong>2018-10-01:</strong>

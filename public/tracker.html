@@ -24,6 +24,7 @@
             <p>Either the room is still loading or there is not a room here.</p>
             <p>Click the button below to initialize a room.</p>
             <p>Be sure to give it a passcode so you can give access to others or yourself on another machine or after a cookie reset.</p>
+            <p>Don't use a real password here. I'm not going to guarantee the security of your passcode</p>
             <p>Room Editing Passcode: <input type="text" name="passcode" id="passcodeInput" /></p>
             <p><button type="button" name="initRoom" id="initRoomButton" onclick="createRoom()">Create Room</button></p>
         </div>
@@ -99,6 +100,13 @@
                         </tr>
                     </table>
                 </fieldset>
+            </fieldset>                
+            <fieldset>
+                    <legend>Voice Settings</legend>
+                    <input type="checkbox" name="toggleVoice" id="toggleVoice" onchange="toggleVoice();">Start Voice Tracking<br><br>
+                    <input type="text" name="lastHeard" id="lastHeard">Last Heard Command<br><br>
+                    <select name="mapToGrammar" id="mapToGrammar"></select>
+                    <button type="button" name="savegrammar" id="savegrammar" onclick="saveGrammar($('#lastHeard').val(),$('#mapToGrammar').val());">Save Grammar</button>
             </fieldset>
             <fieldset id="roomControls">
                 <legend>Room Controls</legend>
