@@ -6,6 +6,7 @@ var defaultItemGrid = [
         "firerod",
         "glove",
         "moonpearl",
+        "boomerang",
     ],
     [
         "somaria",
@@ -20,7 +21,7 @@ var defaultItemGrid = [
         "sword",
         "tunic",
         "shield",
-        "blank",
+        "byrna",
         "bombos",
         "ether",
         "quake",

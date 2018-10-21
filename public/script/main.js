@@ -1,4 +1,3 @@
-
 var trackerOptions = {
   showchests: true,
   showbigkeys: false,
@@ -37,7 +36,7 @@ function getCookie() {
     return JSON.parse(str);
 }
 
-var cookiekeys = ['ts', 'map', 'iZoom', 'mZoom', 'mOrien', 'mPos', 'mapLogic', 'chest', 'prize', 'medal', 'label', 'items'];
+var cookiekeys = ['ts', 'map', 'iZoom', 'mZoom', 'mOrien', 'mPos', 'mapLogic', 'chest', 'prize', 'medal', 'label', 'items','grammars','voiceenabled'];
 var cookieDefault = {
     ts:94,
     map:1,
@@ -50,7 +49,9 @@ var cookieDefault = {
     prize:1,
     medal:1,
     label:1,
-    items:defaultItemGrid
+    items:defaultItemGrid,
+    grammars:grammarsinit,
+    voiceenabled:false
 };
 
 var cookielock = false;
@@ -93,6 +94,9 @@ function setConfigObject(configobj) {
     document.getElementsByName('showmedallion')[0].onchange();
     document.getElementsByName('showlabel')[0].checked = !!configobj.label;
     document.getElementsByName('showlabel')[0].onchange();
+    document.getElementsByName('toggleVoice')[0].checked = !!configobj.voiceenabled;
+    toggleVoice();
+    grammars = configobj.grammars;
 }
 
 function updateConfigFromFirebase(configobj) {
@@ -152,7 +156,8 @@ function getConfigObject() {
     configobj.prize = document.getElementsByName('showcrystal')[0].checked ? 1 : 0;
     configobj.medal = document.getElementsByName('showmedallion')[0].checked ? 1 : 0;
     configobj.label = document.getElementsByName('showlabel')[0].checked ? 1 : 0;
-
+    configobj.voiceenabled = document.getElementsByName('toggleVoice')[0].checked ? 1 : 0;
+    configobj.grammars = grammars;
     configobj.items = window.vm.itemRows;
 
     return configobj;
@@ -552,7 +557,9 @@ function createRoom() {
         dungeonbeaten: dungeonbeatenInit,
         prizes: prizesInit,
         medallions: medallionsInit,
-        chestsopened: chestsopenedInit
+        chestsopened: chestsopenedInit,
+        grammars:grammarsinit,
+        voiceenabled:false
     });
 }
 
@@ -565,6 +572,8 @@ function resetFirebase() {
     rootRef.child('prizes').set(prizesInit);
     rootRef.child('medallions').set(medallionsInit);
     rootRef.child('chestsopened').set(chestsopenedInit);
+    rootRef.child('grammars').set(grammarsinit);
+    rootRef.child('voiceenabled').set(false);
 }
 
 function useTourneyConfig() {
