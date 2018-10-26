@@ -15,7 +15,7 @@
         <script src="/script/chests.js?20181001"></script>
         <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
         <script src="/script/annyang.min.js"></script>
-        <script src="/script/jquery-3.3.1.slim.min.js"></script>
+        <script src="/script/jquery-3.3.1.min.js"></script>
         <script src="/script/voice.js"></script>
     </head>
 
@@ -28,59 +28,47 @@
             <p>Room Editing Passcode: <input type="text" name="passcode" id="passcodeInput" /></p>
             <p><button type="button" name="initRoom" id="initRoomButton" onclick="createRoom()">Create Room</button></p>
         </div>
-
-        <div id='layoutdiv'>
-            <div id='itemdiv' class='itemdiv'>
-                <tracker-table v-if="displayVueMap" :item-rows="itemRows" :tracker-data="trackerData" :tracker-options="trackerOptions"></tracker-table>
-            </div>
-            <div id='mapdiv' class='mapdiv'>
-            </div>
-        </div>
-        <div width='100%' id="caption" align='center'>
-            &nbsp;
-        </div>
-
         <!-- Setting panel-->
 
-        <button id='settingsbutton' type='button' onclick='showSettings(this)'>🔧</button>
-        <fieldset id='settings' class='settings'>
-            <legend>Settings</legend>
-            <fieldset>
-                <legend>Item Tracker</legend>
-                <button type="button" onclick="EditMode()">Edit Mode</button>
-                <br>
-                Size<input type="range" name='itemdivsize' value='100' max='200' min='1' onchange="setZoom('itemdiv', this)">
-                <span id='itemdivsize'>100%</span><br>
-                <fieldset>
-                    <legend>Dungeon Display</legend>
-                    <input type="checkbox" name="showchest" checked='checked' onchange="showChest(this)">Chests
-                    <input type="checkbox" name="showcrystal" checked='checked' onchange="showCrystal(this)">Prizes
-                    <input type="checkbox" name="showmedallion" checked='checked' onchange="showMedallion(this)">Medals<br>
-                    <input type="checkbox" name="showbigkeys" checked='checked' onchange="showbigkeys(this)">Big Keys
-                    <input type="checkbox" name="showsmallkeys" checked='checked' onchange="showsmallkeys(this)">Small Keys<br>
-                    <input type="checkbox" name="showlabel" checked='checked' onchange="showLabel(this)">Dungeon Labels
-                </fieldset>
-            </fieldset>
-            <fieldset>
-                <legend>Map Tracker</legend>
-                <input type="checkbox" name="showmap" checked='checked' onchange="showTracker('mapdiv', this)">Enabled<br>
-                Size<input type="range" name='mapdivsize' value='100' max='200' min='1' onchange="setZoom('mapdiv', this)">
-                <span id='mapdivsize'>100%</span><br>
-                Position:
-                <input type='radio' name='mapposition' value='Below' checked='checked' onclick="setOrder(true)">Below
-                <input type='radio' name='mapposition' value='Side' onclick="setOrder(false)">Side<br>
-                Orientation:
-                <input type='radio' name='maporientation' value='Horizontal' checked='checked' onclick="setMapOrientation(false)">Horizontal
-                <input type='radio' name='maporientation' value='Verical' onclick="setMapOrientation(true)">Vertical<br>
-                <fieldset>
-                    <legend>Logic Options</legend>
+        <nav role="navigation">
+                <div id="menuToggle">
+                    <input type="checkbox" />
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <ul id="menu">
+                    <a href="javascript:$('.menu-item').slideUp();$('#settings-itemtracker').slideDown();"><li>Item Tracker</li></a>
+                    <div id="settings-itemtracker" class="menu-item">
+                    <button type="button" onclick="EditMode()">Edit Mode</button>
+                    <br>
+                    Size<input type="range" name='itemdivsize' value='100' max='200' min='1' onchange="setZoom('itemdiv', this)">
+                    <span id='itemdivsize'>100%</span><br>
+                    Dungeon Display
+                    <br>
+                    <span><input type="checkbox" name="showchest" checked='checked' onchange="showChest(this)">Chests</span>
+                    <span><input type="checkbox" name="showcrystal" checked='checked' onchange="showCrystal(this)">Prizes</span>
+                    <span><input type="checkbox" name="showmedallion" checked='checked' onchange="showMedallion(this)">Medals</span>
+                    <span><input type="checkbox" name="showbigkeys" checked='checked' onchange="showbigkeys(this)">Big Keys</span>
+                    <span><input type="checkbox" name="showsmallkeys" checked='checked' onchange="showsmallkeys(this)">Small Keys</span>
+                    <span><input type="checkbox" name="showlabel" checked='checked' onchange="showLabel(this)">Dungeon Labels</span>
+                </div>
+                <a href="javascript:$('.menu-item').slideUp();$('#settings-maptracker').slideDown();"><li>Map Tracker</li></a>
+                <div id="settings-maptracker" class="menu-item">
+                    <input type="checkbox" name="showmap" checked='checked' onchange="showTracker('mapdiv', this)">Enabled<br>
+                    Size<input type="range" name='mapdivsize' value='100' max='200' min='1' onchange="setZoom('mapdiv', this)">
+                    <span id='mapdivsize'>100%</span><br>
+                    Position:
+                    <input type='radio' name='mapposition' value='Below' checked='checked' onclick="setOrder(true)">Below
+                    <input type='radio' name='mapposition' value='Side' onclick="setOrder(false)">Side<br>
+                    Orientation:
+                    <input type='radio' name='maporientation' value='Horizontal' checked='checked' onclick="setMapOrientation(false)">Horizontal
+                    <input type='radio' name='maporientation' value='Verical' onclick="setMapOrientation(true)">Vertical<br>
+                    Logic Options
                     <input type='radio' name='maplogic' value='glitchless' checked='checked' onclick='setLogic("glitchless")'>Glitchless<br>
                     <input type='radio' name='maplogic' value='owGlitches' onclick='setLogic("owGlitches")'>Overworld Glitches<br>
                     <input type='radio' name='maplogic' value='majorGlitches' onclick='setLogic("majorGlitches")'>Major Glitches<br>
                     <input type='radio' name='maplogic' value='inverted' onclick='setLogic("inverted")'>Inverted
-                </fieldset>
-                <fieldset>
-                    <legend>Chest Legend</legend>
+                    Chest Legend
                     <table border="0" cellspacing="0">
                         <tr>
                             <th class="available">Available</th>
@@ -99,36 +87,49 @@
                             <th class="opened">Opened</th>
                         </tr>
                     </table>
-                </fieldset>
-            </fieldset>                
-            <fieldset>
-                    <legend>Voice Settings</legend>
+                </div>   
+                <a href="javascript:$('.menu-item').slideUp();$('#settings-voicesettings').slideDown();"><li>Voice Settings</li></a>           
+                <div id="settings-voicesettings" class="menu-item">
                     <input type="checkbox" name="toggleVoice" id="toggleVoice" onchange="toggleVoice();">Start Voice Tracking<br><br>
-                    <input type="text" name="lastHeard" id="lastHeard">Last Heard Command<br><br>
+                    <input type="text" name="lastHeard" id="lastHeard"><span>Last Heard Command</span><br><br>
                     <select name="mapToGrammar" id="mapToGrammar"></select>
                     <button type="button" name="savegrammar" id="savegrammar" onclick="saveGrammar($('#lastHeard').val(),$('#mapToGrammar').val());">Save Grammar</button>
-            </fieldset>
-            <fieldset id="roomControls">
-                <legend>Room Controls</legend>
-                <input type="text" name="entryPasscode" id="entryPasscodeInput" />
-                <button type="button" name="enterPasscode" id="enterPasscodeButton" onclick="enterPasscode()">Enter Passcode</button>
-                <div id="editorControls">
-                    <button type="button" name="resetRoom" id="pushConfigButton" onclick="confirmSaveConfigToFirebase()">Push Configuration</button>
-                    <br><br>
-                    <button type="button" name="destroyRoom" id="useTourneyConfigButton" onclick="useTourneyConfig()">Use Tourney Configuration</button>
-                    <br><br>
-                    <button type="button" name="resetRoom" id="resetRoomButton" onclick="resetFirebase()">Reset Room</button>
-                    <br><br>
-                    <button type="button" name="destroyRoom" id="destroyRoomButton" onclick="destroyFirebase()">Destroy Room</button>
                 </div>
-            </fieldset>
-        </fieldset>
+                <a href="javascript:$('.menu-item').slideUp();$('#settings-roomcontrols').slideDown();"><li>Room Controls</li></a>
+                <div id="settings-roomcontrols" class="menu-item">
+                    <input type="text" name="entryPasscode" id="entryPasscodeInput" />
+                    <button type="button" name="enterPasscode" id="enterPasscodeButton" onclick="enterPasscode()">Enter Passcode</button>
+                    <div id="editorControls">
+                        <button type="button" name="resetRoom" id="pushConfigButton" onclick="confirmSaveConfigToFirebase()">Push Configuration</button>
+                        <br><br>
+                        <button type="button" name="destroyRoom" id="useTourneyConfigButton" onclick="useTourneyConfig()">Use Tourney Configuration</button>
+                        <br><br>
+                        <button type="button" name="resetRoom" id="resetRoomButton" onclick="resetFirebase()">Reset Room</button>
+                        <br><br>
+                        <button type="button" name="destroyRoom" id="destroyRoomButton" onclick="destroyFirebase()">Destroy Room</button>
+                    </div>
+                </div>
+            </nav>
+        <div id='layoutdiv'>
+            <div id='itemdiv' class='itemdiv'>
+                <tracker-table v-if="displayVueMap" :item-rows="itemRows" :tracker-data="trackerData" :tracker-options="trackerOptions"></tracker-table>
+            </div>
+            <div id='mapdiv' class='mapdiv'>
+            </div>
+            <div id="alert" class="alert">
+            </div>
+        </div>
+        <div width='100%' id="caption" align='center'>
+            &nbsp;
+        </div>
+
+
 
         <table id='itemconfig' class='itemconfig' style='display:none'></table>
 
 
-        <footer style='bottom:0; width:100%; text-align: center; position: absolute; color:grey'>Lttp Networked Rando Tracker -
-            @pickfifteen (Based on crossproduct, SRL, marcmagus)
+        <footer style='bottom:0; width:100%; text-align: right; position: absolute; color:grey;pointer-events: none;'>Lttp Voice Activated Networked Rando Tracker -
+            WaideSoper (Based on @pickfifteen, crossproduct, SRL, marcmagus)
         </footer>
 
         <script type="text/x-template" id="tracker-table">

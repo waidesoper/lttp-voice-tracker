@@ -238,6 +238,7 @@ if (annyang) {
 	var sayit = function(utter){
 		console.log(utter);
 		$("#lastHeard").val(utter);
+		$("#alert").text(utter).show().fadeOut(3000);
 		var utterThis = new SpeechSynthesisUtterance(utter);
 		synth.speak(utterThis);
 	}
